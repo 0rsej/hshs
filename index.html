@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمة تحويل العملات الرقمية</title>
+    <style>
+        body {
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            flex-direction: column;
+        }
+        .logo-container {
+            margin-bottom: 20px;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            opacity: 0;
+        }
+        .container {
+            max-width: 90%;
+            padding: 20px;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            animation-delay: 1s;
+            opacity: 0;
+        }
+        .second-text, .button-container {
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+            animation-delay: 2.5s;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* استعلامات الوسائط لتعديل حجم الصفحة */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 90%;
+                padding: 15px;
+            }
+            .button-container button {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 95%;
+                padding: 10px;
+            }
+            .button-container button {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" alt="MasterCard Logo" width="150">
+    </div>
+    <div class="container">
+        <h1>أهلا وسهلا</h1>
+        <p>في خدمة تحويل العملات الرقمية عبر بطاقات الماستر كارد</p>
+    </div>
+    <div class="second-text">
+        اضغط للمتابعة
+    </div>
+    <div class="button-container">
+        <button onclick="window.location.href='card-info.html'">متابعة</button>
+    </div>
+</body>
+</html>

