@@ -1,0 +1,9 @@
+[build]
+  publish = "."  # مجلد النشر هو المجلد الجذر
+  functions = "netlify/functions"  # مجلد الوظائف
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true

